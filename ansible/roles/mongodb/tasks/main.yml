@@ -59,11 +59,11 @@
     delay: 10
 
 - name: initialize mongo replicasets
-  command: mongo --eval "'rs.initiate()'"
-  when: mongopkg.changed
+  command: mongo --eval '"rs.initiate()"'
+  when: mongopkg.changed and mongo_cluster_host is defined
 
 - name: add replication nodes
   command: mongo --eval 'rs.add("{{item}}")'
   with_items:
     - "{{ mongodb_nodes }}"
-  when: mongodb_nodes is defined
+  when: mongodb_nodes is defined and mongo_cluster_host is defined
