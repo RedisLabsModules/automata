@@ -1,0 +1,30 @@
+---
+
+- name: apt cache update and upgrade
+  apt:
+    update_cache: yes
+    state: latest
+    name: "*"
+    cache_valid_time: 86400
+
+- name: adding base packages
+  package:
+    state: latest
+    name: "{{ item }}"
+  with_items:
+    - apt-transport-https
+    - gnupg
+    - nmap
+    - software-properties-common
+    - telnet
+    - tmux
+    - vim
+
+- name: apply system tunings
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_items: "{{ sysctl_list }}"

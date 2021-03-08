@@ -1,0 +1,3 @@
+elasticsearch_host: 0.0.0.0
+elasticsearch_port: 9200
+elasticsearch_cluster: my-cluster

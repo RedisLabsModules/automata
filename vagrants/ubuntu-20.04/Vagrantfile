@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-20.04"
+
+  config.vm.synced_folder "../..", "/build"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 8192
+    vb.cpus = 4
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get upgrade -y
+    apt install -y python ansible
+    SHELL
+
+  if ENV["PLAYBOOK"] != nil then
+    config.vm.provision "shell", inline: <<-SHELL
+      cd /build/ansible
+      ansible-playbook -c local -i localhost, #{ENV["PLAYBOOK"]}
+    SHELL
+  end
+end

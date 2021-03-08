@@ -1,0 +1,52 @@
+---
+
+- name: add key for elastic repository
+  apt_key:
+    state: present
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  register: elastickey
+
+- name: install elastic repository
+  apt_repository:
+    state: present
+    filename: elasticdb
+    repo: 'deb https://artifacts.elastic.co/packages/7.x/apt stable main'
+  register: elasticrepo
+
+- name: update apt repository
+  apt:
+    update_cache: yes
+  when: elasticrepo.changed
+
+- name: install elasticserach
+  package:
+    state: latest
+    name: "{{ item }}"
+  register: elasticpkg
+
+- name: set sysctl limits for mongo
+  pam_limits:
+    domain: "{{ item.domain }}"
+    limit_type: "{{ item.type }}"
+    limit_item: "{{ item.name }}"
+    value: "{{ item.value }}"
+  with_items:
+    - {name: nofile, type: soft, value: 294180, domain: "*"}
+    - {name: nofile, type: hard, value: 294180, domain: "*"}
+    - {name: nproc, type: hard, value: 294180, domain: "*"}
+    - {name: nproc, type: soft, value: 294180, domain: "*"}
+
+- name: configure elastic to listen on all ports
+  template:
+    dest: /etc/elasticsearch/elasticsearch.conf
+    owner: root
+    group: root
+    mode: 0644
+    src: elastic.conf
+
+- name: start elastic
+  service:
+    name: mongod
+    state: restarted
+    enabled: yes
+  when: mongopkg.changed

@@ -1,0 +1,3 @@
+cluster.name: {{elasticsearch_cluster}}
+network.host: {{elasticsearch_host}}
+http.port: {{elasticsearch_port}}
