@@ -36,16 +36,16 @@
     - {name: nproc, type: hard, value: 294180, domain: "*"}
     - {name: nproc, type: soft, value: 294180, domain: "*"}
 
-- name: configure mongo to listen on all ports
+- name: generate mongod template
   template:
-    dest: /etc/mongo.conf
+    dest: /etc/mongod.conf
     owner: root
     group: root
     mode: 0644
     src: mongo.conf
   register: mongotemplate
 
-- name: start mongo
+- name: restart mongo
   service:
     name: mongod
     state: restarted
@@ -63,7 +63,7 @@
   when: mongopkg.changed and mongo_cluster_host is defined
 
 - name: add replication nodes
-  command: mongo --eval 'rs.add("{{item}}")'
+  shell: mongo --eval 'rs.add("{{item}}")'
   with_items:
     - "{{ mongodb_nodes }}"
   when: mongodb_nodes is defined and mongo_cluster_host is defined
