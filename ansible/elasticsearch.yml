@@ -1,0 +1,9 @@
+---
+
+- name: install elasticsearch cluster
+  hosts: all
+  become: yes
+
+  roles:
+    - base
+    - elasticsearch

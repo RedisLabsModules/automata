@@ -21,10 +21,10 @@
 - name: install elasticserach
   package:
     state: latest
-    name: "{{ item }}"
+    name: elasticsearch
   register: elasticpkg
 
-- name: set sysctl limits for mongo
+- name: set sysctl limits for elastic
   pam_limits:
     domain: "{{ item.domain }}"
     limit_type: "{{ item.type }}"
@@ -38,15 +38,16 @@
 
 - name: configure elastic to listen on all ports
   template:
-    dest: /etc/elasticsearch/elasticsearch.conf
+    dest: /etc/elasticsearch/elasticsearch.yml
     owner: root
-    group: root
+    group: elasticsearch
     mode: 0644
-    src: elastic.conf
+    src: elasticsearch.conf
+  register: elastictmpl
 
 - name: start elastic
   service:
-    name: mongod
+    name: elasticsearch
     state: restarted
     enabled: yes
-  when: mongopkg.changed
+  when: elasticpkg.changed or elastictmpl.changed
