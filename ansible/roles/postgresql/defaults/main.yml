@@ -1,0 +1,6 @@
+pgsql_port: 5432
+pgsql_host: 127.0.0.1
+pgsql_password: iamthepassword
+
+# If this variable is set (to true) data is stored in memory
+# postgresql_inmemory = false
