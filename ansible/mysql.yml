@@ -1,0 +1,8 @@
+---
+
+- name: install mysql
+  hosts: all
+  become: yes
+
+  roles:
+    - mysql

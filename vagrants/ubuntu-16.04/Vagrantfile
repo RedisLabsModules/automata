@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-16.04"
+
+  config.vm.synced_folder "../..", "/build"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 8192
+    vb.cpus = 4
+  end
+
+  # python and ansible are pinned so that we use the latest version
+  # that doesn't require rust
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get upgrade -y
+    apt-get install -y software-properties-common python python-pip python-dev python-pip
+    pip install cryptography==3.3 ansible==2.9.0
+    SHELL
+
+  if ENV["PLAYBOOK"] != nil then
+    config.vm.provision "shell", inline: <<-SHELL
+      cd /build/ansible
+      ansible-playbook -c local -i localhost, #{ENV["PLAYBOOK"]} #{ENV["ANSIBLE_EXTRA_VARS"]}
+    SHELL
+  end
+end

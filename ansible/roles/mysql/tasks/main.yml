@@ -1,0 +1,16 @@
+---
+
+- name: install apt config for mysql
+  apt:
+    deb: https://dev.mysql.com/get/mysql-apt-config_0.8.16-1_all.deb
+    state: present
+    update_cache: yes
+  register: mysqlapt
+
+- name: install mysqld
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - mysql-client
+    - mysql-server
