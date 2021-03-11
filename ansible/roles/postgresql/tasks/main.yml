@@ -1,0 +1,46 @@
+---
+
+- name: add key for pgsql repository
+  apt_key:
+    state: present
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+  register: pgsqlkey
+
+- name: install pgsql repository
+  apt_repository:
+    state: present
+    filename: pgsql
+    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ focal-pgdg main'
+  register: pgsqlrepo
+
+- name: update apt repository
+  apt:
+    update_cache: yes
+  when: pgsqlrepo.changed
+
+- name: install pgsqldb
+  package:
+    state: latest
+    name: "{{ item }}"
+  register: pgsqlpkg
+  with_items:
+    - postgresql-13
+    - postgresql-client-13
+
+- name: start pgsql
+  service:
+    name: postgresql
+    state: restarted
+    enabled: yes
+  when: pgsqlpkg.changed
+
+- name: wait for pgsql to boot
+  wait_for:
+    port: "{{ pgsql_port }}"
+    host: "{{ pgsql_host }}"
+    delay: 10
+
+- name: create postgresql admin
+  command: psql -c "alter user postgres with password '{{pgsql_password}}'"
+  become_user: postgres
+  become: yes
