@@ -1,0 +1,4 @@
+influxdb_host: 0.0.0.0
+influxdb_port: 8086
+influxdb_cluster: my-cluster
+influxdb_inmemory: false
