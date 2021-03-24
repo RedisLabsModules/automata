@@ -1,0 +1,3 @@
+influxdb_host: 0.0.0.0
+influxdb_port: 8088
+influxdb_inmemory: false

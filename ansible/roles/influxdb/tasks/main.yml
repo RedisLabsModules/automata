@@ -1,0 +1,40 @@
+---
+
+- name: add GPG signing key for Influxdb repository
+  apt_key: 
+    state: present
+    url: https://repos.influxdata.com/influxdb.key 
+
+- name: install Influxdb repository
+  apt_repository: 
+    state: present
+    filename: influxdb
+    repo: 'deb https://repos.influxdata.com/ubuntu focal stable'
+  register: influxdbrepo
+  
+- name: update apt repository
+  apt:
+    update_cache: yes
+  when: influxdbrepo.changed
+
+- name: Install Influxdb packages
+  package: 
+    state: latest
+    name: influxdb
+  register: influxdbpkg
+
+- name: Generate configuration files
+  template:
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/influxdb/influxdb.conf
+    src: influxdb.conf
+  register: influxconf
+
+- name: start Influxdb
+  service: 
+    state: restarted
+    name: influxdb 
+    enabled: yes
+  when: influxdbpkg.changed or influxconf.changed
