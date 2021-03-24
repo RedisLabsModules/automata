@@ -21,11 +21,20 @@
   package: 
     state: latest
     name: influxdb
-  register: influxdbpkg   
+  register: influxdbpkg
+
+- name: Generate configuration files
+  template:
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/influxdb/influxdb.conf
+    src: influxdb.conf
+  register: influxconf
 
 - name: start Influxdb
   service: 
     state: restarted
     name: influxdb 
     enabled: yes
-  when: influxdbpkg.changed
+  when: influxdbpkg.changed or influxconf.changed
