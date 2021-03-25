@@ -1,0 +1,9 @@
+---
+
+- name: install timescaledb
+  hosts: all
+  become: yes
+
+  roles:
+    - base
+    - timescaledb
