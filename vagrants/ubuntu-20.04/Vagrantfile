@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.provision "shell", inline: <<-SHELL
       cd /build/ansible
-      ansible-playbook -c local -i localhost, #{ENV["PLAYBOOK"]} #{ENV["ANSIBLE_EXTRA_VARS"]}
+      ansible-playbook -c local -i localhost, #{ENV["PLAYBOOK"]}.yml #{ENV["ANSIBLE_EXTRA_VARS"]}
     SHELL
   end
 end
