@@ -1,4 +1,4 @@
 influxdb_host: 0.0.0.0
 influxdb_port: 8088
 influxdb_inmemory: false
-influx_default_max_cache_size: 12g
+influxdb_default_max_cache_size: 12g
