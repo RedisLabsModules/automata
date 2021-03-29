@@ -32,6 +32,15 @@
     src: influxdb.conf
   register: influxconf
 
+- name:
+  template:
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/default/influxdb
+    src: influxdefault
+  when: influxdb_master_ip is defined
+
 - name: start Influxdb
   service: 
     state: restarted

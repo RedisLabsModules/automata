@@ -1,0 +1,1 @@
+INFLUXD_OPTS="-join <IP1>:8091"
