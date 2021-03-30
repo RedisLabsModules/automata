@@ -1,1 +1,1 @@
-INFLUXD_OPTS="-join <IP1>:8091"
+INFLUXD_OPTS="-join {{ influxdb_master_ip }}:8091"
