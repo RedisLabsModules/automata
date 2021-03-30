@@ -1,0 +1,27 @@
+---
+
+- name: install timescaledb repository
+  apt_repository:
+    state: present
+    filename: timescale
+    repo: 'ppa:timescale/timescaledb-ppa'
+    update_cache: yes
+  register: timescaleppa
+
+- name: install timescaledb
+  package:
+    state: latest
+    name: timescaledb-2-postgresql-13
+  register: timescalepkg
+
+- name: tune timescaledb with default settings
+  command: timescaledb-tune --yes --quiet
+  when: timescalepkg.changed
+  register: timescaletune
+
+- name: restart timescale
+  service:
+    name: postgresql.service
+    state: restarted
+    enabled: yes
+  when: timescaletune.changed or timescalepkg.changed
