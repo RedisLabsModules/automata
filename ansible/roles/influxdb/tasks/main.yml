@@ -32,9 +32,19 @@
     src: influxdb.conf
   register: influxconf
 
+- name: Configure cluster default file if necessary
+  template:
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/default/influxdb
+    src: influxdefault
+  when: influxdb_master_ip is defined
+  register: influxclusterconfig
+
 - name: start Influxdb
   service: 
     state: restarted
     name: influxdb 
     enabled: yes
-  when: influxdbpkg.changed or influxconf.changed
+  when: influxdbpkg.changed or influxconf.changed or influxclusterconfig.changed
