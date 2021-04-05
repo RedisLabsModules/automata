@@ -1,0 +1,49 @@
+---
+
+- name: add key for neo4j repository
+  apt_key:
+    state: present
+    url: https://debian.neo4j.com/neotechnology.gpg.key
+  register: neo4jkey
+
+- name: install neo4j repository
+  apt_repository:
+    state: present
+    filename: neo4j
+    repo: 'deb https://debian.neo4j.com stable latest'
+  register: neo4jrepo
+
+- name: update apt repository
+  apt:
+    update_cache: yes
+  when: neo4jrepo.changed
+
+- name: install neo4j
+  package:
+    state: latest
+    name: neo4j
+  register: neo4jpkg
+  when: neo4j_enterprise is undefined
+
+- name: install neo4j-enterprise
+  package:
+    state: latest
+    name: neo4j-enterprise
+  register: neo4jpkg
+  when: neo4j_enterprise is defined
+
+- name: copy template in place
+  template:
+    src: neo4j.conf.tmpl
+    dest: /etc/neo4j/neo4j.conf
+    owner: neo4j
+    group: adm
+    mode: 0644
+  register: neo4j_template
+
+- name: restart neo
+  service:
+    name: neo4j
+    state: restarted
+    enabled: yes
+  when: neo4jpkg.changed or neo4j_template.changed
