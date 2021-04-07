@@ -29,12 +29,6 @@ ansible-playbook -i cluster_server_ip, mongo.yml -e mongo_cluster_host=1 -e "mon
 
 ---------------------
 
-#### Building with the local dockerfile
+#### Building faster, in a docker
 
-As a small hack, there's a Dockerfile within this directory. In theory one can build and run any playbook by running the following command:
-
-```
-docker built --build-arg PLAYBOOK=someplaybook.yml .
-```
-
-Using the above example _someplaybook.yml_ would be replaced with _mongodb.yml_ to test the mongodb.yml ansible playbook. Note: given how dockers work, one probably has to disable the calls to systctl in various roles.
+For testing playbooks rapdily, running docksible.sh from the current directory is useful. It requires the playbook (i.e mongodb.yml) as a an arugment, though debugging in a vagrant continues to be much simpler.

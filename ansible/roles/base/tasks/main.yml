@@ -28,3 +28,4 @@
     state: present
     reload: yes
   with_items: "{{ sysctl_list }}"
+  when: ansible_in_docker is undefined

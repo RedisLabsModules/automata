@@ -35,6 +35,7 @@
     - {name: nofile, type: hard, value: 294180, domain: "*"}
     - {name: nproc, type: hard, value: 294180, domain: "*"}
     - {name: nproc, type: soft, value: 294180, domain: "*"}
+  when: ansible_in_docker is undefined
 
 - name: generate mongod template
   template:
