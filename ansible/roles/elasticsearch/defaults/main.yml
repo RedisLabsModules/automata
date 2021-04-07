@@ -2,3 +2,4 @@ elasticsearch_host: 0.0.0.0
 elasticsearch_port: 9200
 elasticsearch_cluster: my-cluster
 elasticsearch_inmemory: false
+elasticsearch_default_dest: /var/lib/elasticsearch

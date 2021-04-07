@@ -10,11 +10,12 @@
 
 # Paths of directories in the installation.
 {% if neo4j_inmemory is defined %}
-dbms.directories.data=/dev/shm
+dbms.directories.data=/dev/shm/neo4j/data
+dbms.directories.plugins=/dev/shm/neo4j/plugins
 {% else %}
-dbms.directories.data=/var/lib/neo4j/data
+dbms.directories.data={{neo4j_default_dest}}/data
+dbms.directories.plugins={{neo4j_default_dest}}/plugins
 {% endif %}
-dbms.directories.plugins=/var/lib/neo4j/plugins
 dbms.directories.logs=/var/log/neo4j
 dbms.directories.lib=/usr/share/neo4j/lib
 dbms.directories.run=/var/run/neo4j

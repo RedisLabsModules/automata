@@ -4,3 +4,4 @@ pgsql_password: iamthepassword
 
 # If this variable is set (to true) data is stored in memory
 # postgresql_inmemory = false
+pgsql_default_dest: /var/lib/postgresql/13/main

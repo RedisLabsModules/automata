@@ -16,19 +16,18 @@ In the example below, replacing the two variables will deploy the named playbook
 
 * --start-at-task="<task name>": Start from a specific ansible task.
 
+* -e @file.yml: Load overrideable variables from a yaml file on disk named *file.yml*
+
 ```
 ansible-playbook -i <ip address of your target>, <playbook>.yml -K
 ```
 
+#### Role variables and overrides
 
-**Example: Initialize mongo servers, and then the cluster server**
-```
-ansible-playbook -i server_ip_1,server_ip_2, mongo.yml
-ansible-playbook -i cluster_server_ip, mongo.yml -e mongo_cluster_host=1 -e "mongodb_nodes=['server_ip_1,server_ip_2]"
-```
+In each case see roles/<rolename>/defaults/main.yml for the list of variables that can be specified or overridden. For example: roles/mongo/defaults/main.yml includes a mongo_inmemory variable, that if set will run mongodb and store all data in /dev/shm.
 
 ---------------------
 
 #### Building faster, in a docker
 
-For testing playbooks rapdily, running docksible.sh from the current directory is useful. It requires the playbook (i.e mongodb.yml) as a an arugment, though debugging in a vagrant continues to be much simpler.
+For testing playbooks rapdily, running docksible.sh from the current directory is useful. It requires the playbook as a an arugment, though debugging in a vagrant continues to be much simpler. Note: if your service requires systemd, then at this time, running the playbook there is probably not useful.

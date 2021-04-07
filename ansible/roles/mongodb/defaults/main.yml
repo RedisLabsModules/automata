@@ -5,3 +5,4 @@ mongo_port: 27017
 mongo_host: 0.0.0.0
 
 mongo_inmemory: false
+mongo_default_dest: /var/lib/mongodb

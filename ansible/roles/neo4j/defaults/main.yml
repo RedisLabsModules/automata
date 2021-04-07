@@ -1,1 +1,2 @@
 neo4j_inmemory: false
+neo4j_default_dest: /var/lib/neo4j
