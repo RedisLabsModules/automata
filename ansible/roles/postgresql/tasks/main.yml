@@ -39,8 +39,3 @@
     port: "{{ pgsql_port }}"
     host: "{{ pgsql_host }}"
     delay: 10
-
-- name: create postgresql admin
-  command: psql -c "alter user postgres with password '{{pgsql_password}}'"
-  become_user: postgres
-  become: yes

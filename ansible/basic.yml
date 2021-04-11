@@ -1,0 +1,8 @@
+---
+
+- name: basic workload
+  hosts: all
+  become: yes
+
+  roles:
+    - base
