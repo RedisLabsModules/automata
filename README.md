@@ -1,6 +1,18 @@
 # automaton
 
-This repository contains the code used to build a variety of platforms.
+This repository contains the code used to build a variety of platforms and systems.
+
+-----------------
+
+## Layout
+
+* vagrants - This folder contains the base information required to build systems.
+
+* images - Build scripts to add things to various clouds.
+
+* ansible - Recipes for producing types of workloads.
+
+* dockers - A folder containing images either used internally, or for building products.
 
 -----------------
 

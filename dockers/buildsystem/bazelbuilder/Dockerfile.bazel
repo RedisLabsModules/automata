@@ -1,0 +1,28 @@
+# OS nvidia/cuda:11.0.3-cudnn8-devel-ubuntu18.04 || nvcr.io/nvidia/deepstream-l4t:5.1-21.02-base
+ARG OS=nvidia/cuda:11.0.3-cudnn8-devel-ubuntu18.04
+ARG BAZEL_VERSION=3.1.0
+ARG BAZEL_ARCH=x86_64
+
+FROM ${OS} as builder
+
+ARG BAZEL_VERSION
+ARG BAZEL_ARCH
+
+# install dependencies
+RUN apt-get -q update && apt-get install -y -qq python3 git unzip wget curl
+ADD deps/readies /readies
+
+# this forces bazelisk to grab the correct version (and build)
+WORKDIR /readies
+RUN ./bin/getbazel
+RUN USE_BAZEL_VERSION=${BAZEL_VERSION} PATH=/usr/local/go/bin:$PATH bazel version
+
+# --------------------------------
+#
+FROM builder
+ARG BAZEL_VERSION
+ARG BAZEL_ARCH
+
+COPY --from=builder /root/.cache/bazelisk/downloads/bazelbuild/bazel-${BAZEL_VERSION}-linux-${BAZEL_ARCH}/bin/bazel /usr/bin/
+RUN chmod a+x /usr/bin/bazel
+RUN bazel --version
