@@ -7,7 +7,7 @@ import hashlib
 import json
 import os
 
-WEBHOOK_URL="https://placeholder"
+WEBHOOK_URL="https://hooks.slack.com/services/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"
 
 def fetch_and_hash(url):
     r = requests.get(url)
@@ -19,9 +19,9 @@ def fetch_and_hash(url):
     return h.hexdigest()
 
 def slackify(u):
-    repo = u.split("/")[4]
+    repo = u.split("/")[3]
     head = u.replace("raw.githubusercontent.com", "github.com")+"#HEAD"
-    msg = """The commands.json for {} were just updated in GitHub. See {}""".format(repo, u)
+    msg = """The commands.json for {} were just updated in GitHub. See <{}|here>""".format(repo, u)
     slack_data = {"text": msg}
     r = requests.post(WEBHOOK_URL, json.dumps(slack_data), headers="Content-Type": "application/json"})
 
