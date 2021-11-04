@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
 # A quick script for sending notifications to Slack when the content of a URL changes.
+# Replace the webhook url for your needs. Test hook removed.
 
 import requests
 import hashlib
 import json
 import os
 
-WEBHOOK_URL="https://hooks.slack.com/services/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"
+WEBHOOK_URL="https://placeholder"
 
 def fetch_and_hash(url):
     r = requests.get(url)
@@ -23,7 +24,7 @@ def slackify(u):
     head = u.replace("raw.githubusercontent.com", "github.com")+"#HEAD"
     msg = """The commands.json for {} were just updated in GitHub. See <{}|here>""".format(repo, u)
     slack_data = {"text": msg}
-    r = requests.post(WEBHOOK_URL, json.dumps(slack_data), headers="Content-Type": "application/json"})
+    r = requests.post(WEBHOOK_URL, json.dumps(slack_data), headers={"Content-Type": "application/json"})
 
 # link to raw commands.json
 urls = [
